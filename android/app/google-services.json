@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1000125512233",
+    "project_id": "mindospowerbi",
+    "storage_bucket": "mindospowerbi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000125512233:android:a8e3c826576a550bb63a38",
+        "android_client_info": {
+          "package_name": "shahlathasni3.example.mindos_2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGDO5pedHG0AGUPbfTTLCxB-5xAPh20gs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
