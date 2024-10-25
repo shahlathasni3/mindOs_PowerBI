@@ -12,7 +12,7 @@ class MainProvider extends ChangeNotifier {
   final TTSService ttsService = TTSService();
   late final FlutterTts flutterTts;
   int amount = 0;
-  String streamAnswer = '';
+  List<String> streamAnswer = [];
   final Gemini gemini = Gemini.instance;
   final TextEditingController controller = TextEditingController();
   final String apiKey = "AIzaSyCJoM-BbHlnwrf4V8fECEjFSC1cabHyErU";
@@ -34,9 +34,9 @@ class MainProvider extends ChangeNotifier {
     controller.clear();
     try {
       await gemini.streamGenerateContent(text).forEach((event) {
-        streamAnswer = event.output.toString();
-        print(streamAnswer);
-        speak(streamAnswer);
+        streamAnswer.add(event.output.toString());
+        // print("shhhhhhh"+streamAnswer+"dgcv");
+        speak(event.output.toString());
         notifyListeners();
       });
     } catch (error) {

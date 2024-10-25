@@ -61,16 +61,16 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
 
       // floating button to add new user
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 15, bottom: 15),
-        child: FloatingActionButton(
-          onPressed: () async {
-            await APIs.auth.signOut();
-            await GoogleSignIn().signOut();
-          },
-          child: const Icon(Icons.add_comment_rounded),
-        ),
-      ),
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.only(right: 15, bottom: 15),
+      //   child: FloatingActionButton(
+      //     onPressed: () async {
+      //       await APIs.auth.signOut();
+      //       await GoogleSignIn().signOut();
+      //     },
+      //     child: const Icon(Icons.add_comment_rounded),
+      //   ),
+      // ),
       body: StreamBuilder(
         stream: APIs.firestore.collection('users').snapshots(),
         builder: (context, snapshot){

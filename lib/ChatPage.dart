@@ -35,11 +35,20 @@ class _ChatPageState extends State<ChatPage> {
       appBar: AppBar(
         backgroundColor: Color(0xFF1578CA), // Set the background color
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,color: Colors.white,),
-          onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
-          },
+        leading: Consumer<MainProvider>(
+          builder: (context,a,child) {
+            return IconButton(
+              icon: Icon(Icons.arrow_back,color: Colors.white,),
+              onPressed: () async {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
+                // Clear the TextField after sending
+                for(var i in a.streamAnswer){
+                  await flutterTts.speak(i);
+                }
+                a.streamAnswer.clear();
+              },
+            );
+          }
         ),
 
         title: Center(
@@ -75,7 +84,10 @@ class _ChatPageState extends State<ChatPage> {
                   return IconButton(
                     icon: Icon(Icons.play_circle_fill_outlined,color: Colors.white,),
                     onPressed: () async {
-                      await flutterTts.speak(val12.streamAnswer);
+                      for(var i in val12.streamAnswer){
+                        await flutterTts.speak(i);
+                      }
+
                     },
                   );
                 }
@@ -86,117 +98,45 @@ class _ChatPageState extends State<ChatPage> {
       ),
       body:Consumer<MainProvider>(
         builder: (context, value100, child) {
-          return SingleChildScrollView(
-            physics: ScrollPhysics(),
-            // child: StreamBuilder(
-            //   stream: APIs.firestore.collection('users').snapshots(),
-            //   builder:(context,snapshot) {
-            //
-            //     switch(snapshot.connectionState){
-            //       // if data is loading
-            //       case ConnectionState.waiting:
-            //       case ConnectionState.none:
-            //         return Center(child: CircularProgressIndicator(),);
-            //       // if some or all data is loaded then show it
-            //       case ConnectionState.active:
-            //       case ConnectionState.done:
-            //
-            //         final data = snapshot.data?.docs;
-            //         for(var i in data!){
-            //            print('Data: ${jsonEncode(i.data())}');
-            //             // list.add(i.data()['name']);
-            //         }
-            child: Container(
-              // height: mq.height * 1.5,
-              width: mq.width,
-              decoration: BoxDecoration(
-                color: Color(0xFFFCF7F7),
-              ),
-              child: Column(
-                children: [
-                  // Padding(
-                  //     padding: EdgeInsets.only(top: 154, left: 150),
-                  //     child: Container(
-                  //         height: mq.height * 0.074,
-                  //         width: mq.width * 0.539,
-                  //         decoration: BoxDecoration(
-                  //         color: Color(0xffEAECEE),
-                  //         borderRadius: BorderRadius.only(
-                  //         topLeft: Radius.circular(25),
-                  //         topRight: Radius.circular(25),
-                  //         bottomLeft: Radius.circular(25),
-                  //         bottomRight: Radius.circular(0))),
-                  //         child: Padding(
-                  //             padding: const EdgeInsets.only(top: 13, left: 13),
-                  //             child: Text(
-                  //                 'What is Flutter. when flutter was developed?',
-                  //                 style: TextStyle(
-                  //                     fontSize: 14,
-                  //                     color: Color(0xFF1578CA),
-                  //                 ),
-                  //             ),
-                  //         ),
-                  //     ),
-                  // ),
-                  Scrollbar(
-                    interactive: true,
-                    radius: Radius.circular(10),
-                    thickness: 20,
-                    trackVisibility: true,
-                    thumbVisibility: true,
-                    controller: _scrollController,
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 24, right: 15),
-                        child: Container(
-                          // height: height * 0.474,
-                          width: mq.width * 0.879,
-                          decoration: BoxDecoration(
-                              color: Color(0xFF1578CA),
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(25),
-                                  topRight: Radius.circular(25),
-                                  bottomLeft: Radius.circular(0),
-                                  bottomRight: Radius.circular(25))),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 13, left: 13),
-                            child: Column(
-                              children: [
-                                Text(
-                                  value100.streamAnswer,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    color: Color(0xffffffff),
-                                  ),
-                                ),
-                                // ReadMoreText(
-                                //   value100.streamAnswer,
-                                //   style: TextStyle(
-                                //       color: Color(0xffffffff), fontSize: 15),
-                                //   trimLines: 3,
-                                //   colorClickableText: Color(0xFF8AC6F7),
-                                //   trimMode: TrimMode.Line,
-                                //   trimCollapsedText: 'Read more',
-                                //   trimExpandedText: 'Read less',
-                                //   moreStyle: const TextStyle(
-                                //     fontSize: 20,
-                                //     color: Color(0xFFFCF7F7),
-                                //   ),
-                                // ),
-                              ],
-                            ),
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            // height: mq.height * 1.5,
+            width: mq.width,
+            decoration: BoxDecoration(
+              color: Color(0xFFFCF7F7),
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(top: 24, right: 15),
+              child: Container(
+                // height: height * 0.474,
+                width: mq.width * 0.879,
+                decoration: BoxDecoration(
+                    color: Color(0xFF1578CA),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25),
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(25))),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 13, left: 13),
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: value100.streamAnswer.length, // Set this to the number of items you want to display
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0), // Add padding for better UI
+                        child: Text(
+                          value100.streamAnswer[index], // Assuming streamAnswer is a string
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Color(0xffffffff),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
-
-                  SizedBox(height: 150,),
-                  // SizedBox(
-                  //   width: 400,
-                  //     height: 400,
-                  //     child: O3D(src: "assets/avatar/mind2@anim.glb")),
-                ],
+                ),
               ),
             ),
           );
@@ -265,6 +205,8 @@ class _ChatPageState extends State<ChatPage> {
                             // Clear the TextField after sending
                             value120.controller.clear();
 
+                            // Clear the streamAnswer after click send for another question
+                            value10.streamAnswer.clear();
                             // Call the Gemini stream function to get a response
                             value120.geminiStream(message);
                           }

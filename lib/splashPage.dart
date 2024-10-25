@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'chatui.dart';
 import 'contWithGoogle.dart';
 import 'homePage.dart';
 
@@ -27,6 +28,7 @@ class _splashPageState extends State<splashPage> {
           builder:(BuildContext context, AsyncSnapshot<User?> snapshot) {
               if(snapshot.hasData == true){
                 final User? user = snapshot.data;
+                // return chatUIPage();
                 return HomeScreen();
               }
               return contWithGoogle();
